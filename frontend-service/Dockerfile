@@ -1,6 +1,8 @@
 FROM oraclelinux:7-slim
 
 copy ./frontend-service/containerconfig/localhost.conf /tmp/
+copy ./frontend-service/containerconfig/ngnix.conf /tmp/
+
 
 RUN yum -y install nginx && \
     yum -y install openssl && \
@@ -8,7 +10,8 @@ RUN yum -y install nginx && \
     openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout localhost.key -out localhost.crt -subj "/C=NL/ST=Utrecht/L=Utrecht/O=Dis/CN=localhost" && \
     mv localhost.crt /etc/ssl/certs/localhost.crt && \
     mkdir /etc/ssl/private && \
-    mv localhost.key /etc/ssl/private/localhost.key
+    mv localhost.key /etc/ssl/private/localhost.key &&\
+    mv /tmp/ngnix.conf /etc/nginx/sites-available/default
     
 EXPOSE 80 443
 
